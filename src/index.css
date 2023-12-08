@@ -1,0 +1,106 @@
+/* ============= GLOBAL CSS =============== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+*,
+::after,
+::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+} /*16px*/
+
+:root {
+  --font: 'Outfit', sans-serif;
+  font-family: var(--font);
+  /* colours */
+
+  /* grey */
+  --grey-50: #f8fafc;
+  --grey-100: #f1f5f9;
+  --grey-200: #e2e8f0;
+  --grey-300: #cbd5e1;
+  --grey-400: #94a3b8;
+  --grey-500: #64748b;
+  --grey-600: #475569;
+  --grey-700: #334155;
+  --grey-800: #1e293b;
+  --grey-900: #0f172a;
+
+  --darkest-grey: #070b14;
+  /*
+  purplechem purples
+  #d8b4fe light
+  #a855f7 primary
+  #7e22ce dark
+
+  #482683 primary
+  #533882 light
+*/
+  --primaryDark: #7e22ce;
+  --primary: #a855f7;
+  --primaryLight: #d8b4fe;
+  --highlight: yellow;
+
+  --borderRadius: 0.6rem;
+
+  /* box shadow*/
+  /* --shadow-1: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-2: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-3: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-4: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); */
+
+  --shadow-1: 0 1px 3px 0 rgba(255, 255, 255, 0.8), 0 1px 2px 0 rgba(255, 255, 255, 0.5);
+  --shadow-2: 0 4px 6px -1px rgba(255, 255, 255, 0.8), 0 2px 4px -1px rgba(255, 255, 255, 0.5);
+  --shadow-3: 0 10px 15px -3px rgba(255, 255, 255, 0.8), 0 4px 6px -2px rgba(255, 255, 255, 0.5);
+  --shadow-4: 0 20px 25px -5px rgba(255, 255, 255, 0.8), 0 10px 10px -5px rgba(255, 255, 255, 0.5);
+
+  /* input, select, button variables */
+  --input-fontSize: 1.25rem;
+
+  --input-borderRadius: var(--borderRadius);
+  --input-outline: none;
+
+  --input-padding: 0.5rem 0.5rem 0.5rem 1rem;
+  --input-marginY: 0.5rem;
+
+  --input-labelMarginLeft: 1rem;
+
+  /* 
+  --text-color: var(--grey-800);
+  --backgroundColor: var(--grey-50);
+  --backgroundWhite: white;
+  --input-color: var(--grey-800);
+  --input-colorHover: black;
+  --input-background: white;
+  --input-backgroundHover: var(--grey-50);
+  --input-border: 2px solid black;
+      --input-borderColorFocus: 2px solid var(--primaryLight);
+  */
+
+  --text-color: var(--grey-50);
+  --input-color: var(--grey-50);
+  --input-colorHover: white;
+  --input-border: 2px solid var(--primary);
+  --input-colorHighlight: var(--highlight);
+
+  --darkmodebg: var(--darkest-grey);
+  --backgroundColor: var(--darkmodebg);
+  --backgroundWhite: var(--darkmodebg);
+  --input-background: var(--darkmodebg);
+  --input-backgroundHover: var(--grey-900);
+  --input-borderColorFocus: 2px solid var(--primaryLight);
+}
+
+body {
+  background: var(--backgroundColor);
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
