@@ -3,7 +3,9 @@ import styled from 'styled-components'
 
 import { RDKitCtx } from '../../contexts/RDKitCtx'
 
-export default function JSME({ width = 550, height = 500 }) {
+// Hidden input fields allow access to the smile and inchi values by placing < JSME /> inside a form
+
+export default function JSME({ width = 550, height = 500, menuScale = 1.5 }) {
   const [jsmeApplet, setJsmeApplet] = React.useState(null)
 
   const { RDKit } = React.useContext(RDKitCtx)
@@ -14,7 +16,7 @@ export default function JSME({ width = 550, height = 500 }) {
   React.useEffect(() => {
     const newJsmeApplet = new JSApplet.JSME('jsme_container', `${width}px`, `${height}px`)
     // newJsmeApplet.options('newLook')
-    newJsmeApplet.setMenuScale(1.5)
+    newJsmeApplet.setMenuScale(menuScale)
     newJsmeApplet.setUserInterfaceBackgroundColor('#A493C1')
     newJsmeApplet.setMolecularAreaLineWidth(2)
     newJsmeApplet.setAtomMolecularAreaFontSize(12)

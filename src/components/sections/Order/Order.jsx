@@ -1,23 +1,23 @@
 import React from 'react'
 import styled from 'styled-components'
-
 import { toast } from 'react-toastify'
 
-import { useQuery } from '@tanstack/react-query'
-
-import { TokenCtx } from '../../../contexts/TokenCtx'
-import { usePostOrder } from '../../../mutations/usePostOrder'
-
-import OrderCAS from './OrderCAS'
-import OrderForm from './OrderForm'
+import OrderQuery from './OrderQuery'
+import OrderStructure from './OrderStructure'
+import OrderDetails from './OrderDetails'
+import ChemicalProperties from './ChemicalProperties'
 
 import { DataURL } from '../../../constants'
+import { inputBtn } from '../../styles/mixins'
+
+import { useQuery } from '@tanstack/react-query'
+import { usePostOrder } from '../../../mutations/usePostOrder'
+import { TokenCtx } from '../../../contexts/TokenCtx'
 
 // populate 'suppliers' cache with data
 function suppliersQuery() {
   return { queryKey: ['suppliers'], queryFn: getSuppliersData, staleTime: 1000 * 60 * 5 }
 }
-
 async function getSuppliersData() {
   const JWT = window.localStorage.getItem('access-token')
 
@@ -32,7 +32,6 @@ async function getSuppliersData() {
 
   return json
 }
-
 export const suppliersLoader = (queryClient) => async () => {
   const query = suppliersQuery()
   const data = queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query))
@@ -42,88 +41,137 @@ export const suppliersLoader = (queryClient) => async () => {
   return data
 }
 
-/*
-
-Change the way order is written
-Just have two big objects in Order.jsx
-One is for chem properties, and one is for order details
-Each keypress will re-write the object, but it will look much cleaner
-
-Show the structure after a search. Show other properties too? Don't really want to allow them to be modified by users...
-*/
-
 export default function Order() {
-  const [newChemical, setNewChemical] = React.useState({})
-  const [extendedForm, setExtendedForm] = React.useState(false)
-  const [status, setStatus] = React.useState('idle')
+  const [chemProperties, setChemProperties] = React.useState({})
+  const [searchStrings, setSearchStrings] = React.useState({})
+
+  const queryRef = React.useRef()
+  const orderFormRef = React.useRef()
 
   const { JWT } = React.useContext(TokenCtx)
 
   const query = suppliersQuery()
   const { data: suppliers } = useQuery(query)
 
-  const casRef = React.useRef()
-  const extendedRef = React.useRef()
+  const { mutate: fetchPostOrder } = usePostOrder({ JWT })
 
-  const { fetchPostOrder } = usePostOrder({ JWT })
+  // idle | found | notFound
+  const [searchStatus, setSearchStatus] = React.useState('idle')
 
-  // gets called from OrderForm
-  // data contains ordering info, and if inputted manually, chemical properties & structure data
-  async function placeOrder({ orderData, physData }) {
-    //
+  async function handleSubmit(e) {
+    e.preventDefault()
 
-    let chemicalData = {}
-    // if chemical data wasn't found by cas or database, get data via the form in ExtendedOrderForm
-    if (extendedForm) {
-      // determine CAS number via casRef
-      const casNumberData = new FormData(casRef.current)
-      const casNumber = casNumberData.get('cas')
-
-      chemicalData = {
-        CAS: String(casNumber),
-        chemicalName: String(physData.chemicalName),
-        MW: String(physData.MW),
-        MP: String(physData.MP),
-        BP: String(physData.BP),
-        density: String(physData.density),
-        smile: String(physData.smile),
-        inchi: String(physData.inchi),
-      }
-    } else {
-      // otherwise, it will be stored in newChemical already
-      chemicalData = newChemical
+    // if CAS not found, get chemProperties from the form data
+    if (searchStatus === 'notFound') {
+      const manualChemProperties = getManualInputProperties()
+      if (!manualChemProperties) return
+      setChemProperties(manualChemProperties)
     }
-    console.log({ chemicalData, orderData })
-    return
-    fetchPostOrder({ chemicalData, orderData })
+
+    const orderData = getOrderData()
+    if (!orderData) return
+
+    fetchPostOrder({ chemicalData: chemProperties, orderData }, { onSuccess: resetPage })
+  }
+
+  function getManualInputProperties() {
+    const formData = new FormData(orderFormRef.current)
+    const data = {
+      CAS: String(formData.get('CAS')),
+      chemicalName: String(formData.get('chemicalName')),
+      MW: formData.get('MW') ? String(formData.get('MW')) : null,
+      MP: formData.get('MP') ? String(formData.get('MP')) : null,
+      BP: formData.get('BP') ? String(formData.get('BP')) : null,
+      density: formData.get('density') ? String(formData.get('density')) : null,
+      smile: String(formData.get('smile')),
+      inchi: String(formData.get('inchi')),
+    }
+
+    console.log(data)
+
+    if (!data.CAS) {
+      toast.error('Please enter a CAS number.')
+      return
+    }
+    if (!data.chemicalName) {
+      toast.error('Please enter chemical name.')
+      return
+    }
+    if (!data.smile || !data.inchi) {
+      toast.error('Please draw a chemical structure.')
+      return
+    }
+
+    return data
+  }
+
+  function getOrderData() {
+    const formData = new FormData(orderFormRef.current)
+    const data = {
+      amount: Number(formData.get('amount')),
+      amountUnit: String(formData.get('amountUnit')),
+      supplier_id: Number(formData.get('supplierID')),
+      supplierPN: String(formData.get('supplierPN')),
+    }
+    if (!data.amount) {
+      toast.error('Please enter an amount.')
+      return
+    }
+    if (!data.amountUnit) {
+      toast.error('Please select a unit.')
+      return
+    }
+    if (!data.supplier_id) {
+      toast.error('Please select a supplier.')
+      return
+    }
+    return data
+  }
+
+  function resetPage() {
+    setSearchStatus('idle')
+    setChemProperties({})
+    setSearchStrings({})
+    queryRef.current.reset()
+    orderFormRef.current.reset()
   }
 
   return (
     <Wrapper>
-      {/* <Heading level={3}>Order</Heading> */}
-      <OrderCAS
-        setNewChemical={setNewChemical}
-        setExtendedForm={setExtendedForm}
-        setStatus={setStatus}
-        casRef={casRef}
+      <OrderQuery
+        queryRef={queryRef}
+        searchStatus={searchStatus}
+        setSearchStatus={setSearchStatus}
+        setChemProperties={setChemProperties}
+        setSearchStrings={setSearchStrings}
       />
-      {status === 'loading' && <LoadingMsg>Searching...</LoadingMsg>}
-      {status === 'searched' && (
-        <OrderForm
-          suppliers={suppliers}
-          placeOrder={placeOrder}
-          extendedForm={extendedForm}
-          extendedRef={extendedRef}
-        />
+      {searchStatus !== 'idle' && (
+        <form ref={orderFormRef} onSubmit={handleSubmit}>
+          <ChemPropertyWrapper>
+            <OrderStructure searchStatus={searchStatus} chemProperties={chemProperties} />
+            <ChemicalProperties
+              searchStatus={searchStatus}
+              chemProperties={chemProperties}
+              searchStrings={searchStrings}
+            />
+          </ChemPropertyWrapper>
+
+          <OrderDetails suppliers={suppliers} searchStatus={searchStatus} />
+
+          <Button>Submit</Button>
+        </form>
       )}
     </Wrapper>
   )
 }
 
-const Wrapper = styled.main`
-  margin-top: 2rem;
+const Wrapper = styled.main``
+
+const Button = styled.button`
+  ${inputBtn}
 `
 
-const LoadingMsg = styled.p`
-  color: 'var(--text-color)';
+const ChemPropertyWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 `
