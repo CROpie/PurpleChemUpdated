@@ -1,17 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
-
-import { TokenCtx } from '../../../contexts/TokenCtx'
-import { useNavigate } from 'react-router-dom'
 
 import { usePostLogin } from '../../../mutations/usePostLogin.jsx'
 import { formInput, formLabel } from '../../styles/mixins'
+
+import { getSession } from '../../utils/SessionAPI.jsx'
+import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
   const [email, setEmail] = React.useState('admin@purplechem.com')
   const [password, setPassword] = React.useState('default')
 
   const { mutate: fetchPostLogin } = usePostLogin()
+
+  const JWT = getSession()
+  const navigate = useNavigate()
+
+  React.useEffect(() => {
+    if (JWT) navigate('/inventory')
+  }, [JWT])
 
   async function handleSubmit(e) {
     e.preventDefault()

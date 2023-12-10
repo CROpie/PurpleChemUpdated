@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import { formInput, formLabel } from '../../styles/mixins'
-import { TokenCtx } from '../../../contexts/TokenCtx'
+import { formInput, formLabel, inputBtn } from '../../styles/mixins'
+// import { TokenCtx } from '../../../contexts/TokenCtx'
 import { usePatchInventory } from '../../../mutations/usePatchInventory'
 
 export default function OrderAdjust({ order, locations }) {
   const [amount, setAmount] = React.useState(order.amount)
   const [locationID, setLocationID] = React.useState(order.location_id ? order.location_id : -1)
-  const { JWT } = React.useContext(TokenCtx)
+  const JWT = React.useContext(TokenCtx).getSession()
 
   const { mutate: fetchPatchInventory } = usePatchInventory()
 
@@ -46,7 +46,7 @@ export default function OrderAdjust({ order, locations }) {
             </option>
           ))}
         </Select>
-        <Button>Submit</Button>
+        <Button>Update</Button>
       </form>
     </Wrapper>
   )
@@ -74,4 +74,7 @@ const Select = styled.select`
   ${formInput}
 `
 
-const Button = styled.button``
+const Button = styled.button`
+  ${inputBtn}
+  color: var(--primary)
+`

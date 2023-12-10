@@ -1,20 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { formLabel, formInput } from '../../styles/mixins'
+import { formLabel, formInput, inputBtn } from '../../styles/mixins'
 
 import { usePostLocation } from '../../../mutations/usePostLocation'
 
-import { TokenCtx } from '../../../contexts/TokenCtx'
+// import { TokenCtx } from '../../../contexts/TokenCtx'
 
 export default function NewLocation({ setShowNewLocation }) {
   const [newLocation, setNewLocation] = React.useState('')
-  const { JWT } = React.useContext(TokenCtx)
+  const JWT = React.useContext(TokenCtx).getSession()
 
   const { mutate: fetchPostLocation } = usePostLocation()
 
   function handleSubmit(e) {
-    console.log('handle')
     e.preventDefault()
     if (!newLocation) return
 
@@ -29,7 +28,7 @@ export default function NewLocation({ setShowNewLocation }) {
         value={newLocation}
         onChange={(e) => setNewLocation(e.target.value)}
       />
-      <button>Submit</button>
+      <Button>Add</Button>
     </form>
   )
 }
@@ -40,4 +39,9 @@ const Label = styled.label`
 
 const Input = styled.input`
   ${formInput}
+`
+
+const Button = styled.button`
+  ${inputBtn}
+  color: var(--primary)
 `

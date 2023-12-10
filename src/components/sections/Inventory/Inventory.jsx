@@ -1,8 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
+import { toast } from 'react-toastify'
 
-import { TokenCtx } from '../../../contexts/TokenCtx'
-import { useNavigate } from 'react-router-dom'
+// import { TokenCtx, getSession } from '../../../contexts/TokenCtx'
+import { redirect, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 
 import { DataURL } from '../../../constants'
@@ -12,7 +13,7 @@ import Heading from '../../minor/Heading'
 import LocationsSidebar from './LocationsSidebar'
 import OrdersAccordion from './OrdersAccordion'
 
-import { toast } from 'react-toastify'
+import { getSession } from '../../utils/SessionAPI'
 
 // populate 'inventory' cache with data
 function inventoryQuery() {
@@ -20,7 +21,7 @@ function inventoryQuery() {
 }
 
 async function getInventoryData() {
-  const JWT = window.localStorage.getItem('access-token')
+  const JWT = getSession()
 
   const response = await fetch(`${DataURL}/inventory`, {
     headers: { 'content-type': 'application/json', Authorization: `Bearer ${JWT}` },
@@ -35,6 +36,13 @@ async function getInventoryData() {
 }
 
 export const inventoryLoader = (queryClient) => async () => {
+  const JWT = getSession()
+
+  if (!JWT) {
+    toast.error('not logged in...')
+    return redirect('/login')
+  }
+
   const query = inventoryQuery()
   const data = queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query))
 
@@ -53,7 +61,6 @@ export default function Inventory() {
 
   return (
     <Wrapper>
-      {/* <Heading level={3}>Inventory</Heading> */}
       <Layout>
         <LocationsSidebar
           locations={locations}

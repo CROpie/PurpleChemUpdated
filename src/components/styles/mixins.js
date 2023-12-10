@@ -26,6 +26,7 @@ export const formLabel = `
 display: block;
 margin-left: var(--input-labelMarginLeft);
 color: var(--text-color);
+cursor: pointer;
 `
 
 export const formInput = `

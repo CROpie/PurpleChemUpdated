@@ -1,9 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
+import { toast } from 'react-toastify'
+
+import { getSession } from '../../utils/SessionAPI'
 
 import { useQuery } from '@tanstack/react-query'
-
-import { TokenCtx } from '../../../contexts/TokenCtx'
+import { useNavigate } from 'react-router-dom'
 
 import { inputBtn } from '../../styles/mixins'
 
@@ -19,6 +21,15 @@ import { getQueryData } from '../../../mutations/getQueryData'
 // causes an automatic refetch since it is the queryKey value
 
 export default function Query() {
+  const navigate = useNavigate()
+  const session = getSession()
+  React.useEffect(() => {
+    if (!session) {
+      toast.error('not logged in...')
+      navigate('/login')
+    }
+  }, [session])
+
   // string | structure
   const [queryType, setQueryType] = React.useState('string')
   const [queryString, setQueryString] = React.useState(null)
@@ -27,11 +38,9 @@ export default function Query() {
     queryType === 'string' ? setQueryType('structure') : setQueryType('string')
   }
 
-  const { JWT } = React.useContext(TokenCtx)
-
   const { data: orders } = useQuery({
     queryKey: ['query', queryString],
-    queryFn: () => getQueryData({ queryType, queryString, JWT }),
+    queryFn: () => getQueryData({ queryType, queryString }),
   })
 
   return (

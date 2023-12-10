@@ -1,24 +1,25 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Link, useLocation } from 'react-router-dom'
-import { TokenCtx } from '../../contexts/TokenCtx'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+// import { TokenCtx } from '../../contexts/TokenCtx'
 import { toast } from 'react-toastify'
+
+import { logOut } from '../utils/SessionAPI'
 
 const pages = ['admin', 'inventory', 'order', 'query']
 
 function Menu() {
-  const { setJWT } = React.useContext(TokenCtx)
-
+  const navigate = useNavigate()
   let { pathname } = useLocation()
   pathname = pathname.slice(1)
 
   const [selectedPage, setSelectedPage] = React.useState(pathname)
 
   function handleLogOut() {
-    setJWT()
-    window.localStorage.removeItem('access-token')
+    logOut()
     toast.success('Logged out.')
+    navigate('/login')
   }
 
   return (

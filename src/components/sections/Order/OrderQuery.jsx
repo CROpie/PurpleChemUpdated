@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { TokenCtx } from '../../../contexts/TokenCtx'
+// import { TokenCtx } from '../../../contexts/TokenCtx'
 
 import { formLabel, formInput, inputBtn } from '../../styles/mixins'
 
@@ -17,14 +17,13 @@ export default function OrderQuery({
   setChemProperties,
   setSearchStrings,
 }) {
-  const { JWT } = React.useContext(TokenCtx)
+  // const JWT = React.useContext(TokenCtx).getSession()
 
   async function handleSubmit(e) {
     e.preventDefault()
 
     const formData = new FormData(queryRef.current)
     const queryString = String(formData.get('queryString')).trim()
-    console.log('queryString: ', queryString)
 
     if (!queryString) return
 
@@ -35,8 +34,8 @@ export default function OrderQuery({
       searchCAS({ CAS: queryString })
       return
     }
-
     // try to find the CAS number from the chemical name entered
+    // only checks an online database, doesn't yet check personal database
     const CAS = await getCASFromChemName({ chemicalName: queryString })
     if (CAS) {
       setSearchStrings({ chemicalName: queryString, CAS })

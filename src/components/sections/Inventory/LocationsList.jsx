@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { inputBtn } from '../../styles/mixins'
 
 export default function LocationsList({ locations, selectedLocation, setSelectedLocation }) {
-  console.log(selectedLocation)
   return (
     <ul>
       <li key={'all'}>

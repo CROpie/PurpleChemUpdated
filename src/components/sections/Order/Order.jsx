@@ -12,14 +12,18 @@ import { inputBtn } from '../../styles/mixins'
 
 import { useQuery } from '@tanstack/react-query'
 import { usePostOrder } from '../../../mutations/usePostOrder'
-import { TokenCtx } from '../../../contexts/TokenCtx'
+import { redirect } from 'react-router-dom'
+
+import { getSession } from '../../utils/SessionAPI'
+
+// import { TokenCtx } from '../../../contexts/TokenCtx'
 
 // populate 'suppliers' cache with data
 function suppliersQuery() {
   return { queryKey: ['suppliers'], queryFn: getSuppliersData, staleTime: 1000 * 60 * 5 }
 }
 async function getSuppliersData() {
-  const JWT = window.localStorage.getItem('access-token')
+  const JWT = getSession()
 
   const response = await fetch(`${DataURL}/supplierslist`, {
     headers: { 'content-type': 'application/json', Authorization: `Bearer ${JWT}` },
@@ -33,6 +37,13 @@ async function getSuppliersData() {
   return json
 }
 export const suppliersLoader = (queryClient) => async () => {
+  const JWT = getSession()
+
+  if (!JWT) {
+    toast.error('not logged in...')
+    return redirect('/login')
+  }
+
   const query = suppliersQuery()
   const data = queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query))
 
@@ -48,12 +59,12 @@ export default function Order() {
   const queryRef = React.useRef()
   const orderFormRef = React.useRef()
 
-  const { JWT } = React.useContext(TokenCtx)
+  // const JWT = React.useContext(TokenCtx).getSession()
 
   const query = suppliersQuery()
   const { data: suppliers } = useQuery(query)
 
-  const { mutate: fetchPostOrder } = usePostOrder({ JWT })
+  const { mutate: fetchPostOrder } = usePostOrder()
 
   // idle | found | notFound
   const [searchStatus, setSearchStatus] = React.useState('idle')
@@ -86,8 +97,6 @@ export default function Order() {
       smile: String(formData.get('smile')),
       inchi: String(formData.get('inchi')),
     }
-
-    console.log(data)
 
     if (!data.CAS) {
       toast.error('Please enter a CAS number.')

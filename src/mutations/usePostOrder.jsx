@@ -2,8 +2,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
 import { DataURL } from '../constants'
+import { getSession } from '../components/utils/SessionAPI'
 
-async function postOrder({ chemicalData, orderData, JWT }) {
+async function postOrder({ chemicalData, orderData }) {
+  const JWT = getSession()
   const response = await fetch(`${DataURL}/order`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', Authorization: `Bearer ${JWT}` },
@@ -17,13 +19,18 @@ async function postOrder({ chemicalData, orderData, JWT }) {
   return json
 }
 
-export const usePostOrder = ({ JWT }) => {
+export const usePostOrder = () => {
+  const queryClient = useQueryClient()
+
   return useMutation({
-    mutationFn: async ({ chemicalData, orderData }) => postOrder({ chemicalData, orderData, JWT }),
-    onSuccess: () => toast.success('Order placed'),
+    mutationFn: async ({ chemicalData, orderData }) => postOrder({ chemicalData, orderData }),
+    onSuccess: () => {
+      toast.success('Order placed')
+      queryClient.invalidateQueries({ queryKey: ['inventory'] })
+    },
     onError: (error) => {
       console.error('Something went wrong...', error)
-      toast.error('Failed place order...')
+      toast.error('Failed to place order...')
     },
   })
 }

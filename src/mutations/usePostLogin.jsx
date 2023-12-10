@@ -1,9 +1,11 @@
 import React from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AuthURL } from '../constants'
-import { TokenCtx } from '../contexts/TokenCtx'
+// import { TokenCtx } from '../contexts/TokenCtx'
 
 import { toast } from 'react-toastify'
+
+import { logIn } from '../components/utils/SessionAPI'
 
 async function postLogin({ email: username, password }) {
   const response = await fetch(AuthURL, {
@@ -22,13 +24,12 @@ async function postLogin({ email: username, password }) {
 
 export const usePostLogin = () => {
   const queryClient = useQueryClient()
-  const { setJWT } = React.useContext(TokenCtx)
 
   return useMutation({
     mutationFn: async ({ email, password }) => postLogin({ email, password }),
     onSuccess: (data) => {
       toast.success('Logged in!')
-      setJWT(data.access_token)
+      logIn({ data })
     },
     onError: (error) => {
       toast.error('Unknown Credentials')
