@@ -6,6 +6,13 @@ import { getSession } from '../components/utils/SessionAPI'
 
 async function postOrder({ chemicalData, orderData }) {
   const JWT = getSession()
+
+  // refresh token logic here?
+  if (!JWT) {
+    toast.error('Session has expired.')
+    throw new Error('Network response was not ok.')
+  }
+
   const response = await fetch(`${DataURL}/order`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', Authorization: `Bearer ${JWT}` },

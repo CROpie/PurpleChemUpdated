@@ -2,10 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { toast } from 'react-toastify'
 
-import { getSession } from '../../utils/SessionAPI'
-
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
 
 import { inputBtn } from '../../styles/mixins'
 
@@ -21,15 +18,6 @@ import { getQueryData } from '../../../mutations/getQueryData'
 // causes an automatic refetch since it is the queryKey value
 
 export default function Query() {
-  const navigate = useNavigate()
-  const session = getSession()
-  React.useEffect(() => {
-    if (!session) {
-      toast.error('not logged in...')
-      navigate('/login')
-    }
-  }, [session])
-
   // string | structure
   const [queryType, setQueryType] = React.useState('string')
   const [queryString, setQueryString] = React.useState(null)

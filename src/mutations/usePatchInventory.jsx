@@ -2,9 +2,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
 import { DataURL } from '../constants'
+import { getSession } from '../components/utils/SessionAPI'
 
-async function patchInventory({ patchInventoryItem, JWT }) {
-  console.log(patchInventoryItem)
+async function patchInventory({ patchInventoryItem }) {
+  const JWT = getSession()
+
+  // refresh token logic here?
+  if (!JWT) {
+    toast.error('Session has expired.')
+    throw new Error('Network response was not ok.')
+  }
 
   const response = await fetch(`${DataURL}/inventory`, {
     method: 'PATCH',
@@ -21,7 +28,7 @@ export const usePatchInventory = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async ({ patchInventoryItem, JWT }) => patchInventory({ patchInventoryItem, JWT }),
+    mutationFn: async ({ patchInventoryItem }) => patchInventory({ patchInventoryItem }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['inventory'] })
       toast.success('Updated.')

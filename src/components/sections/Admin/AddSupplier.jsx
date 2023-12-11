@@ -4,11 +4,8 @@ import { formLabel, formInput, inputBtn } from '../../styles/mixins'
 
 import Heading from '../../minor/Heading'
 import { usePostSupplier } from '../../../mutations/usePostSupplier'
-// import { TokenCtx } from '../../../contexts/TokenCtx'
-
 export default function AddSupplier() {
   const [supplierName, setSupplierName] = React.useState('')
-  const JWT = React.useContext(TokenCtx).getSession()
 
   const { mutate: fetchPostSupplier } = usePostSupplier()
 
@@ -17,7 +14,7 @@ export default function AddSupplier() {
 
     if (!supplierName) return
 
-    fetchPostSupplier({ supplierName, JWT }, { onSuccess: () => setSupplierName('') })
+    fetchPostSupplier({ supplierName }, { onSuccess: () => setSupplierName('') })
   }
   return (
     <Wrapper>

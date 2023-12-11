@@ -12,11 +12,8 @@ import { inputBtn } from '../../styles/mixins'
 
 import { useQuery } from '@tanstack/react-query'
 import { usePostOrder } from '../../../mutations/usePostOrder'
-import { redirect } from 'react-router-dom'
 
 import { getSession } from '../../utils/SessionAPI'
-
-// import { TokenCtx } from '../../../contexts/TokenCtx'
 
 // populate 'suppliers' cache with data
 function suppliersQuery() {
@@ -37,12 +34,10 @@ async function getSuppliersData() {
   return json
 }
 export const suppliersLoader = (queryClient) => async () => {
+  // need to prevent trying to access data before being authorized
+  // (separate from preventing routing)
   const JWT = getSession()
-
-  if (!JWT) {
-    toast.error('not logged in...')
-    return redirect('/login')
-  }
+  if (!JWT) return null
 
   const query = suppliersQuery()
   const data = queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query))

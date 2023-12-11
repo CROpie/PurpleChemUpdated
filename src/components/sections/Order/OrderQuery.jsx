@@ -1,8 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 
-// import { TokenCtx } from '../../../contexts/TokenCtx'
-
 import { formLabel, formInput, inputBtn } from '../../styles/mixins'
 
 import { getChemicalProperties } from '../../../mutations/getChemicalProperties'
@@ -17,8 +15,6 @@ export default function OrderQuery({
   setChemProperties,
   setSearchStrings,
 }) {
-  // const JWT = React.useContext(TokenCtx).getSession()
-
   async function handleSubmit(e) {
     e.preventDefault()
 
@@ -49,7 +45,7 @@ export default function OrderQuery({
   async function searchCAS({ CAS }) {
     // searches online CAS database, and if unsuccessful, searches purpleChem database
     // if still not found, will have to input chemical property data manually
-    const data = await getChemicalProperties({ CAS, JWT })
+    const data = await getChemicalProperties({ CAS })
 
     if (!data) {
       setSearchStatus('notFound')

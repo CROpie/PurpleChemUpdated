@@ -1,24 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { toast } from 'react-toastify'
-
-import { getSession } from '../../utils/SessionAPI'
 
 import { inputBtn } from '../../styles/mixins'
 
-import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 
 export default function Admin() {
-  const session = getSession()
-  const navigate = useNavigate()
-
-  React.useEffect(() => {
-    if (!session) {
-      toast.error('not logged in...')
-      navigate('/login')
-    }
-  }, [session])
-
   return (
     <Wrapper>
       <Sidebar>

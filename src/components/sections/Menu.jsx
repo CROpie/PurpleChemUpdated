@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-// import { TokenCtx } from '../../contexts/TokenCtx'
+
 import { toast } from 'react-toastify'
 
 import { logOut } from '../utils/SessionAPI'
@@ -19,7 +19,11 @@ function Menu() {
   function handleLogOut() {
     logOut()
     toast.success('Logged out.')
-    navigate('/login')
+    // there is a bug where if (for some reason) navigated to "/", then log out will not go to public root after logout
+    // (need to manually refresh the page to see the login screen again)
+    navigate('/', { replace: true })
+    // this command fixes it, but it looks ugly. Will keep it hidden for now, since the bug is hard to access
+    // window.location.reload()
   }
 
   return (

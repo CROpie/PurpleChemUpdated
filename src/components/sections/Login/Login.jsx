@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import { usePostLogin } from '../../../mutations/usePostLogin.jsx'
 import { formInput, formLabel } from '../../styles/mixins'
 
-import { getSession } from '../../utils/SessionAPI.jsx'
 import { useNavigate } from 'react-router-dom'
 
 export default function Login() {
@@ -13,17 +12,19 @@ export default function Login() {
 
   const { mutate: fetchPostLogin } = usePostLogin()
 
-  const JWT = getSession()
   const navigate = useNavigate()
-
-  React.useEffect(() => {
-    if (JWT) navigate('/inventory')
-  }, [JWT])
 
   async function handleSubmit(e) {
     e.preventDefault()
 
-    fetchPostLogin({ email, password })
+    fetchPostLogin(
+      { email, password },
+      {
+        onSuccess: () => {
+          navigate('/inventory')
+        },
+      }
+    )
   }
 
   return (

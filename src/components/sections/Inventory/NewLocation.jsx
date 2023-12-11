@@ -5,11 +5,8 @@ import { formLabel, formInput, inputBtn } from '../../styles/mixins'
 
 import { usePostLocation } from '../../../mutations/usePostLocation'
 
-// import { TokenCtx } from '../../../contexts/TokenCtx'
-
 export default function NewLocation({ setShowNewLocation }) {
   const [newLocation, setNewLocation] = React.useState('')
-  const JWT = React.useContext(TokenCtx).getSession()
 
   const { mutate: fetchPostLocation } = usePostLocation()
 
@@ -17,7 +14,7 @@ export default function NewLocation({ setShowNewLocation }) {
     e.preventDefault()
     if (!newLocation) return
 
-    fetchPostLocation({ newLocation, JWT }, { onSuccess: () => setShowNewLocation(false) })
+    fetchPostLocation({ newLocation }, { onSuccess: () => setShowNewLocation(false) })
   }
 
   return (
