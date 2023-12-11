@@ -13,14 +13,15 @@ import { inputBtn } from '../../styles/mixins'
 import { useQuery } from '@tanstack/react-query'
 import { usePostOrder } from '../../../mutations/usePostOrder'
 
-import { getSession } from '../../utils/SessionAPI'
+import { getSession, getSessionWithRefresh } from '../../utils/SessionAPI'
 
 // populate 'suppliers' cache with data
 function suppliersQuery() {
   return { queryKey: ['suppliers'], queryFn: getSuppliersData, staleTime: 1000 * 60 * 5 }
 }
 async function getSuppliersData() {
-  const JWT = getSession()
+  const JWT = await getSessionWithRefresh()
+  if (!JWT) return null
 
   const response = await fetch(`${DataURL}/supplierslist`, {
     headers: { 'content-type': 'application/json', Authorization: `Bearer ${JWT}` },
@@ -34,9 +35,10 @@ async function getSuppliersData() {
   return json
 }
 export const suppliersLoader = (queryClient) => async () => {
+  console.log('get supplier data')
   // need to prevent trying to access data before being authorized
   // (separate from preventing routing)
-  const JWT = getSession()
+  const JWT = await getSessionWithRefresh()
   if (!JWT) return null
 
   const query = suppliersQuery()

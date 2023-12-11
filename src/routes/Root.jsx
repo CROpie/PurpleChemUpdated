@@ -4,47 +4,34 @@ import { toast } from 'react-toastify'
 
 import Menu from '../components/sections/Menu'
 import { Outlet, useLocation } from 'react-router-dom'
-import { exchangeRefresh, getSession } from '../components/utils/SessionAPI'
 
-import { Navigate } from 'react-router-dom'
 import Login from '../components/sections/Login/Login'
 
-export default function PrivateRoot() {
+import { getSessionWithRefresh } from '../components/utils/SessionAPI'
+
+export default function Root() {
   // token auth logic for navigation is contained in this component
 
-  // for some reason, just having this hook present will re-render this component on navigation ???
-  useLocation()
+  // for some reason, just having this the useLocation() hook present will re-render this component on navigation ???
 
   // otherwise, this only runs once. So if token expires, getSession() won't re-run
   // which means can still move from page to page on an expired token
 
-  // could put refresh token logic here?
-
   // useLocation() + this will fix routing on expired token, but api calls need their own solution
   // since the page will still be open when the token expires
-  // const JWT = getSession()
-  // if (!JWT) {
-  //   toast.error('Session has expired.')
-  //   return <Navigate to="/" />
-  // }
 
-  let JWT = getSession()
+  const [JWT, setJWT] = React.useState()
 
-  if (!JWT) {
-    toast.error('Session has expired.')
-    JWT = exchangeRefreshToken()
-  }
+  const location = useLocation()
 
-  const [loadRefresh, setLoadRefresh] = React.useState(false)
+  React.useEffect(() => {
+    async function testSession() {
+      const token = await getSessionWithRefresh()
+      setJWT(token)
+    }
 
-  async function exchangeRefreshToken() {
-    JWT = await exchangeRefresh()
-    setLoadRefresh(true)
-    if (!JWT) return <Navigate to="/" />
-    setLoadRefresh(false)
-  }
-
-  if (loadRefresh) return <p>Loading...</p>
+    testSession()
+  }, [location])
 
   return (
     <Wrapper>

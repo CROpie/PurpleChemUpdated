@@ -1,0 +1,12 @@
+
+refresh token logic
+
+when navigating between pages, if a token expires it will be automatically refreshed
+(Thanks to using useLocation with useEffect in PrivateRoot which is the parent of all private routes)
+
+but: if a page is left open, it will expire and not refresh. This is solved by:
+
+const JWT = await getSessionWithRefresh():
+    gets a token from the session cookie if available
+    uses a refresh token to generate a new token if session has expired
+    toasts error "session has expired" and return nothing if refresh token has also expired

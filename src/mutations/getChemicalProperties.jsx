@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify'
 
 import { CASURL, DataURL } from '../constants'
-import { getSession } from '../components/utils/SessionAPI'
+import { getSessionWithRefresh } from '../components/utils/SessionAPI'
 
 export async function getChemicalProperties({ CAS }) {
   const response = await fetch(`${CASURL}?cas_rn=${CAS}`)
@@ -23,13 +23,8 @@ export async function getChemicalProperties({ CAS }) {
 }
 
 async function getChemicalPropertiesFromDatabase({ CAS }) {
-  const JWT = getSession()
-
-  // refresh token logic here?
-  if (!JWT) {
-    toast.error('Session has expired.')
-    return
-  }
+  const JWT = await getSessionWithRefresh()
+  if (!JWT) return
 
   const response = await fetch(`${DataURL}/chemicalquery?type=CAS&query=${CAS}`, {
     headers: { 'content-type': 'application/json', Authorization: `Bearer ${JWT}` },

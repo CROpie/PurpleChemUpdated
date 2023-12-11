@@ -1,14 +1,13 @@
 import React from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AuthURL } from '../constants'
-// import { TokenCtx } from '../contexts/TokenCtx'
 
 import { toast } from 'react-toastify'
 
 import { logIn } from '../components/utils/SessionAPI'
 
 async function postLogin({ email: username, password }) {
-  const response = await fetch(AuthURL, {
+  const response = await fetch(`${AuthURL}/token`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({ username, password }),

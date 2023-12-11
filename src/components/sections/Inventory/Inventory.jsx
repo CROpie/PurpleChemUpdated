@@ -9,7 +9,7 @@ import { DataURL } from '../../../constants'
 import LocationsSidebar from './LocationsSidebar'
 import OrdersAccordion from './OrdersAccordion'
 
-import { getSession } from '../../utils/SessionAPI'
+import { getSessionWithRefresh } from '../../utils/SessionAPI'
 
 // populate 'inventory' cache with data
 function inventoryQuery() {
@@ -17,7 +17,8 @@ function inventoryQuery() {
 }
 
 async function getInventoryData() {
-  const JWT = getSession()
+  const JWT = await getSessionWithRefresh()
+  if (!JWT) return null
 
   const response = await fetch(`${DataURL}/inventory`, {
     headers: { 'content-type': 'application/json', Authorization: `Bearer ${JWT}` },
@@ -34,7 +35,7 @@ async function getInventoryData() {
 export const inventoryLoader = (queryClient) => async () => {
   // need to prevent trying to access data before being authorized
   // (separate from preventing routing)
-  const JWT = getSession()
+  const JWT = await getSessionWithRefresh()
   if (!JWT) return null
 
   const query = inventoryQuery()

@@ -18,7 +18,7 @@ export default function OrderAdjust({ order, locations }) {
       patchInventoryItem: {
         id: order.id,
         amount: Number(amount),
-        isConsumed: amount === 0 ? true : false,
+        isConsumed: Number(amount) === 0 ? true : false,
         location_id: locationID ? Number(locationID) : null,
       },
     })

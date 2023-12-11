@@ -1,4 +1,5 @@
 import { postRefreshToken } from '../../mutations/postRefreshToken'
+import { toast } from 'react-toastify'
 
 export function logIn({ data }) {
   setCookie({ name: 'session', value: data.access_token, time: 1000 * 60 * 60 * 30 })
@@ -24,6 +25,9 @@ export async function exchangeRefresh() {
   if (!refreshData) return null
 
   setCookie({ name: 'session', value: refreshData.access_token, time: 1000 * 60 * 30 })
+
+  const token = getSession()
+  return token
 }
 
 export function getSession() {
@@ -31,30 +35,6 @@ export function getSession() {
     .split('; ')
     .find((row) => row.startsWith('session='))
     ?.split('=')[1]
-
-  if (!session) {
-    // Couldn't get this to work properly. Probably need to find a new strategy - or do it on the backend instead.
-    // getSession() is a synchronous function, but to include fetching a refresh token, it needs to be async
-    // but that changes the way that getSession() needs to be implemented.
-    // causes problems with react-router because once a route is loaded, it doesn't run code to re-render or re-load it
-
-    return
-
-    // const refresh_token = document.cookie
-    //   .split('; ')
-    //   .find((row) => row.startsWith('refresh='))
-    //   ?.split('=')[1]
-
-    // if (!refresh_token) return null
-
-    // console.log('attempting to exchange refresh token')
-    // const refreshData = await postRefreshToken({ refresh_token })
-
-    // if (!refreshData) return null
-
-    // setCookie({ name: 'session', value: refreshData.access_token, time: 1000 * 60 * 30 })
-    // setCookie({ name: 'refresh', value: refreshData.refresh_token, time: 1000 * 60 * 60 * 12 })
-  }
 
   return session
 }
@@ -67,4 +47,25 @@ function setCookie({ name, value, time }) {
 
 function deleteCookie({ name }) {
   setCookie({ name, value: '', time: 0 })
+}
+
+// gets a token from the session cookie if available
+// uses a refresh token to generate a new token if session has expired
+// toasts error "session has expired" and return nothing if refresh token has also expired
+export async function getSessionWithRefresh() {
+  let JWT = getSession()
+
+  if (!JWT) {
+    const refreshedToken = await exchangeRefresh()
+
+    if (!refreshedToken) {
+      toast.error('Session has expired.')
+      // throw new Error('Network response was not ok.')
+      return null
+    } else {
+      JWT = refreshedToken
+    }
+  }
+
+  return JWT
 }

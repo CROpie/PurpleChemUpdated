@@ -17,10 +17,14 @@ export default function OrdersAccordion({ orders, selectedLocation, locations })
   const [selectedItem, setSelectedItem] = React.useState()
   const [structure, setStructure] = React.useState('')
 
-  const { RDKit } = React.useContext(RDKitCtx)
+  console.log(orders)
+
+  orders = orders.filter((order) => order.isConsumed === false)
 
   if (selectedLocation.id !== 'all')
     orders = orders.filter((order) => order.location_id === selectedLocation.id)
+
+  const { RDKit } = React.useContext(RDKitCtx)
 
   function handleClick(order) {
     const currentStructure = RDKit.get_mol(order.chemical.smile).get_svg()
