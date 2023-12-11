@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { toast } from 'react-toastify'
+import { MOBILEBREAKPOINT } from '../../../constants'
 
 import { useQuery } from '@tanstack/react-query'
 
@@ -13,11 +14,12 @@ import { getSessionWithRefresh } from '../../utils/SessionAPI'
 
 // populate 'inventory' cache with data
 function inventoryQuery() {
-  return { queryKey: ['inventory'], queryFn: getInventoryData, staleTime: 1000 * 60 * 5 }
+  return { queryKey: ['inventory'], queryFn: getInventoryData }
 }
 
 async function getInventoryData() {
   const JWT = await getSessionWithRefresh()
+
   if (!JWT) return null
 
   const response = await fetch(`${DataURL}/inventory`, {
@@ -36,6 +38,7 @@ export const inventoryLoader = (queryClient) => async () => {
   // need to prevent trying to access data before being authorized
   // (separate from preventing routing)
   const JWT = await getSessionWithRefresh()
+
   if (!JWT) return null
 
   const query = inventoryQuery()
@@ -80,4 +83,9 @@ const Layout = styled.section`
   display: grid;
   grid-template-columns: 300px 1fr;
   gap: 4px;
+
+  @media (${MOBILEBREAKPOINT}) {
+    grid-template-columns: 1fr;
+  }
+  gap: 24px;
 `

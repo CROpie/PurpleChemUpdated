@@ -2,9 +2,11 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { usePostLogin } from '../../../mutations/usePostLogin.jsx'
-import { formInput, formLabel } from '../../styles/mixins'
+import { formInput, formLabel, inputBtn } from '../../styles/mixins'
 
 import { useNavigate } from 'react-router-dom'
+
+import { MOBILEBREAKPOINT } from '../../../constants.js'
 
 export default function Login() {
   const [email, setEmail] = React.useState('admin@purplechem.com')
@@ -43,7 +45,7 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Entry>
-        <button>Log In</button>
+        <Button>Log In</Button>
       </form>
     </Wrapper>
   )
@@ -51,6 +53,7 @@ export default function Login() {
 
 const Wrapper = styled.section`
   margin-top: '1rem';
+  margin: 0 auto;
 `
 
 const Entry = styled.div`
@@ -66,14 +69,6 @@ const Input = styled.input`
   ${formInput}
 `
 
-/*
-
-  const { JWT } = React.useContext(TokenCtx)
-  console.log('login JWT: ', JWT)
-
-  const navigate = useNavigate()
-  auto redirect if logged in
-  React.useEffect(() => {
-    if (JWT) navigate('/inventory')
-  }, [JWT])
-*/
+const Button = styled.button`
+  ${inputBtn}
+`

@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { MOBILEBREAKPOINT } from '../../../constants'
 
 import { formLabel, formInput, inputBtn } from '../../styles/mixins'
 
@@ -40,5 +41,5 @@ const Input = styled.input`
 
 const Button = styled.button`
   ${inputBtn}
-  color: var(--primary)
+  color: var(--primary);
 `

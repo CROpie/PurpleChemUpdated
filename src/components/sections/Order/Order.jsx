@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { toast } from 'react-toastify'
+import { MOBILEBREAKPOINT } from '../../../constants'
 
 import OrderQuery from './OrderQuery'
 import OrderStructure from './OrderStructure'
@@ -13,11 +14,11 @@ import { inputBtn } from '../../styles/mixins'
 import { useQuery } from '@tanstack/react-query'
 import { usePostOrder } from '../../../mutations/usePostOrder'
 
-import { getSession, getSessionWithRefresh } from '../../utils/SessionAPI'
+import { getSessionWithRefresh } from '../../utils/SessionAPI'
 
 // populate 'suppliers' cache with data
 function suppliersQuery() {
-  return { queryKey: ['suppliers'], queryFn: getSuppliersData, staleTime: 1000 * 60 * 5 }
+  return { queryKey: ['suppliers'], queryFn: getSuppliersData }
 }
 async function getSuppliersData() {
   const JWT = await getSessionWithRefresh()
@@ -35,7 +36,6 @@ async function getSuppliersData() {
   return json
 }
 export const suppliersLoader = (queryClient) => async () => {
-  console.log('get supplier data')
   // need to prevent trying to access data before being authorized
   // (separate from preventing routing)
   const JWT = await getSessionWithRefresh()
@@ -180,4 +180,9 @@ const Button = styled.button`
 const ChemPropertyWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 8px;
+
+  @media (${MOBILEBREAKPOINT}) {
+    grid-template-columns: 1fr;
+  }
 `

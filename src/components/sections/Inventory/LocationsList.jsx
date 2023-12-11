@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { inputBtn } from '../../styles/mixins'
+import { MOBILEBREAKPOINT } from '../../../constants'
 
 export default function LocationsList({ locations, selectedLocation, setSelectedLocation }) {
   return (
@@ -29,5 +30,12 @@ export default function LocationsList({ locations, selectedLocation, setSelected
 
 const Button = styled.button`
   ${inputBtn}
-  color: ${(props) => (props.$isSelected ? 'var(--input-colorHighlight)' : 'var(--input-color)')}
+  color: ${(props) => (props.$isSelected ? 'var(--input-colorHighlight)' : 'var(--input-color)')};
+
+  @media (${MOBILEBREAKPOINT}) {
+    font-size: 1rem;
+    padding-block: 4px;
+    margin-top: 4px;
+    margin-bottom: 0;
+  }
 `

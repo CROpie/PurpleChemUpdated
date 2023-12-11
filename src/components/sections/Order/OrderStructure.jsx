@@ -16,7 +16,13 @@ export default function OrderStructure({ searchStatus, chemProperties }) {
 
   return (
     <Wrapper>
-      {searchStatus === 'notFound' && <JSME width="400" height="400" menuScale="1" />}
+      {searchStatus === 'notFound' && (
+        <JSME
+          width={window.innerWidth < 400 ? window.innerWidth - 50 : 400}
+          height={window.innerWidth < 400 ? window.innerWidth - 50 : 400}
+          menuScale="1"
+        />
+      )}
       {searchStatus === 'found' && <div dangerouslySetInnerHTML={{ __html: structure }} />}
     </Wrapper>
   )
@@ -25,4 +31,5 @@ export default function OrderStructure({ searchStatus, chemProperties }) {
 const Wrapper = styled.section`
   display: grid;
   place-items: center;
+  overflow: hidden;
 `

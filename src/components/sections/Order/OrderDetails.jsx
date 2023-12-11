@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { inputBtn, formInput, formLabel } from '../../styles/mixins'
+import { MOBILEBREAKPOINT } from '../../../constants'
 
 const amountUnitList = [
   { label: 'mg', value: 'mg' },
@@ -103,8 +104,10 @@ const Button = styled.button`
 `
 
 const InputsWrapper = styled.div`
-  display: flex;
-  & > div {
-    flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  @media (${MOBILEBREAKPOINT}) {
+    grid-template-columns: 1fr;
   }
 `

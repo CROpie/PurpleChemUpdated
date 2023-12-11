@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { MOBILEBREAKPOINT } from '../../../constants'
 
 import { inputBtn } from '../../styles/mixins'
 
@@ -25,6 +26,10 @@ const Wrapper = styled.main`
   display: grid;
   grid-template-columns: 1fr 4fr;
   gap: 8px;
+
+  @media (${MOBILEBREAKPOINT}) {
+    grid-template-columns: 1fr;
+  }
 `
 
 const Sidebar = styled.section`

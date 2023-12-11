@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { MOBILEBREAKPOINT } from '../../../constants'
 
 import {
   Accordion,
@@ -13,11 +14,11 @@ import OrderProperties from './OrderProperties'
 import OrderAdjust from './OrderAdjust'
 import { RDKitCtx } from '../../../contexts/RDKitCtx'
 
+import DOMPurify from 'dompurify'
+
 export default function OrdersAccordion({ orders, selectedLocation, locations }) {
   const [selectedItem, setSelectedItem] = React.useState()
   const [structure, setStructure] = React.useState('')
-
-  console.log(orders)
 
   orders = orders.filter((order) => order.isConsumed === false)
 
@@ -32,14 +33,22 @@ export default function OrdersAccordion({ orders, selectedLocation, locations })
     setSelectedItem(selectedItem === order.id ? null : order.id)
   }
 
+  // dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(chemicalName) }}
+
   return (
     <AcRoot type="single" collapsible>
       {orders.map((order) => (
         <AcItem key={order.id} value={order.id}>
           <AcHeader>
-            <AcTrigger $isSelected={selectedItem === order.id} onClick={() => handleClick(order)}>
+            {/* <AcTrigger $isSelected={selectedItem === order.id} onClick={() => handleClick(order)} >
               {order.chemical.chemicalName} ({order.id})
-            </AcTrigger>
+            </AcTrigger> */}
+
+            <AcTrigger
+              $isSelected={selectedItem === order.id}
+              onClick={() => handleClick(order)}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(order.chemical.chemicalName) }}
+            />
           </AcHeader>
           <AcContentWrapper>
             <AcContent>
@@ -53,9 +62,7 @@ export default function OrdersAccordion({ orders, selectedLocation, locations })
   )
 }
 
-const AcRoot = styled(Accordion)`
-  margin-top: '0.5rem';
-`
+const AcRoot = styled(Accordion)``
 
 const AcItem = styled(AccordionItem)``
 
@@ -74,6 +81,7 @@ const AcTrigger = styled(AccordionTrigger)`
   margin-bottom: var(--input-marginY);
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
+  font-family: var(--font);
   cursor: pointer;
 
   color: ${(props) => (props.$isSelected ? 'var(--input-colorHighlight)' : 'var(--input-color)')};
@@ -81,6 +89,13 @@ const AcTrigger = styled(AccordionTrigger)`
   &:hover {
     color: var(--input-colorHover);
     background: var(--input-backgroundHover);
+  }
+
+  @media (${MOBILEBREAKPOINT}) {
+    font-size: 1rem;
+    padding-block: 4px;
+    margin-top: 4px;
+    margin-bottom: 0;
   }
 `
 
@@ -125,4 +140,8 @@ const AcContent = styled.div`
   padding: 0.5rem;
   border-bottom-right-radius: var(--input-borderRadius);
   border-bottom-left-radius: var(--input-borderRadius);
+
+  @media (${MOBILEBREAKPOINT}) {
+    grid-template-columns: 1fr;
+  }
 `

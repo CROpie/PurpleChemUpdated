@@ -16,7 +16,11 @@ export default function QueryStructure({ setQueryString }) {
 
   return (
     <Wrapper ref={formRef} onSubmit={handleSubmit}>
-      <JSME />
+      <JSME
+        width={window.innerWidth < 550 ? window.innerWidth - 25 : 550}
+        height={window.innerWidth < 500 ? window.innerWidth - 25 : 500}
+        menuScale={window.innerWidth < 500 ? 1 : 1.5}
+      />
       <Button>Search</Button>
     </Wrapper>
   )

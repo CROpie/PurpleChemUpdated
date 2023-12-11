@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { MOBILEBREAKPOINT } from '../../../constants'
 
 import LocationsList from './LocationsList'
 import NewLocation from './NewLocation'
@@ -28,4 +29,10 @@ const Wrapper = styled.section``
 
 const Button = styled.button`
   ${inputBtn}
+  @media (${MOBILEBREAKPOINT}) {
+    font-size: 1rem;
+    padding-block: 4px;
+    margin-top: 4px;
+    margin-bottom: 0;
+  }
 `

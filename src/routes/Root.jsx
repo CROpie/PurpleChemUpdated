@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { toast } from 'react-toastify'
+import { MOBILEBREAKPOINT } from '../constants'
 
 import Menu from '../components/sections/Menu'
 import { Outlet, useLocation } from 'react-router-dom'
@@ -35,8 +36,7 @@ export default function Root() {
 
   return (
     <Wrapper>
-      <p style={{ color: 'white' }}>Private Root</p>
-      <Menu />
+      <Menu JWT={JWT} />
       {JWT ? <Outlet /> : <Login />}
     </Wrapper>
   )
@@ -44,5 +44,11 @@ export default function Root() {
 
 const Wrapper = styled.main`
   max-width: 1000px;
+
   margin: 2rem auto;
+  padding-inline: 2rem;
+
+  @media (${MOBILEBREAKPOINT}) {
+    padding-inline: 0.5rem;
+  }
 `
