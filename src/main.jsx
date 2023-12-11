@@ -21,6 +21,9 @@ import { suppliersLoader } from './components/sections/Order/Order'
 import Admin from './components/sections/Admin/Admin'
 import AddUser from './components/sections/Admin/AddUser'
 import AddSupplier from './components/sections/Admin/AddSupplier'
+import ModifySupplier, { adminSuppliersLoader } from './components/sections/Admin/ModifySupplier'
+import ModifyChemical, { adminChemicalsLoader } from './components/sections/Admin/ModifyChemical'
+import ModifyOrder, { adminOrdersLoader } from './components/sections/Admin/ModifyOrder'
 
 const queryClient = new QueryClient()
 
@@ -54,6 +57,21 @@ const router = createBrowserRouter([
           {
             path: 'addsupplier',
             element: <AddSupplier />,
+          },
+          {
+            path: 'modifysupplier',
+            element: <ModifySupplier />,
+            loader: adminSuppliersLoader(queryClient),
+          },
+          {
+            path: 'modifychemical',
+            element: <ModifyChemical />,
+            loader: adminChemicalsLoader(queryClient),
+          },
+          {
+            path: 'modifyorder',
+            element: <ModifyOrder />,
+            loader: adminOrdersLoader(queryClient),
           },
         ],
       },

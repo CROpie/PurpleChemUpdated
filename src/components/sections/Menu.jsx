@@ -9,6 +9,8 @@ import { toast } from 'react-toastify'
 import { logOut } from '../utils/SessionAPI'
 import Hamburger from '../icons/Hamburger'
 
+import LOGO from '../../assets/BearbeerCrop.png'
+
 const pages = ['admin', 'inventory', 'order', 'query']
 
 function Menu({ JWT }) {
@@ -39,7 +41,9 @@ function Menu({ JWT }) {
   return (
     <Wrapper>
       <LogoBurger>
-        <h1>LOGO</h1>
+        <ImgContainer>
+          <img src={LOGO} alt="beerbear" />
+        </ImgContainer>
         <HamburgerContainer onClick={toggleLinks}>
           <Hamburger />
         </HamburgerContainer>
@@ -128,6 +132,15 @@ const LogoutBtn = styled.button`
   cursor: pointer;
   &:hover {
     color: lime;
+  }
+`
+
+const ImgContainer = styled.div`
+  height: 48px;
+
+  & > img {
+    height: 100%;
+    width: 100%;
   }
 `
 

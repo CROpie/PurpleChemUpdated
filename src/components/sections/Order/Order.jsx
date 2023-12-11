@@ -56,8 +56,6 @@ export default function Order() {
   const queryRef = React.useRef()
   const orderFormRef = React.useRef()
 
-  // const JWT = React.useContext(TokenCtx).getSession()
-
   const query = suppliersQuery()
   const { data: suppliers } = useQuery(query)
 

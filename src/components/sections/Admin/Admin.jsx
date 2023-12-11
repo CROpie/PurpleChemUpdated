@@ -16,6 +16,15 @@ export default function Admin() {
         <Link to="addsupplier">
           <Button>Add Supplier</Button>
         </Link>
+        <Link to="modifysupplier">
+          <Button>Modify Suppliers</Button>
+        </Link>
+        <Link to="modifychemical">
+          <Button>Modify Chemicals</Button>
+        </Link>
+        <Link to="modifyorder">
+          <Button>Modify Orders</Button>
+        </Link>
       </Sidebar>
       <Outlet />
     </Wrapper>

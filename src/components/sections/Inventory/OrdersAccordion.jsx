@@ -33,17 +33,11 @@ export default function OrdersAccordion({ orders, selectedLocation, locations })
     setSelectedItem(selectedItem === order.id ? null : order.id)
   }
 
-  // dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(chemicalName) }}
-
   return (
     <AcRoot type="single" collapsible>
       {orders.map((order) => (
         <AcItem key={order.id} value={order.id}>
           <AcHeader>
-            {/* <AcTrigger $isSelected={selectedItem === order.id} onClick={() => handleClick(order)} >
-              {order.chemical.chemicalName} ({order.id})
-            </AcTrigger> */}
-
             <AcTrigger
               $isSelected={selectedItem === order.id}
               onClick={() => handleClick(order)}

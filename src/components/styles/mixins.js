@@ -20,6 +20,8 @@ margin-bottom: var(--input-marginY);
 &:focus {
   border: var(--input-borderColorFocus);
 }
+
+cursor: pointer;
 `
 
 export const formLabel = `
