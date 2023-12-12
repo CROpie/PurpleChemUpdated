@@ -23,7 +23,10 @@ async function getInventoryData() {
   if (!JWT) return null
 
   const response = await fetch(`${DataURL}/inventory`, {
-    headers: { 'content-type': 'application/json', Authorization: `Bearer ${JWT}` },
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${JWT}`,
+    },
   })
   if (!response.ok) {
     toast.error(`Error (${response.statusText})`)
