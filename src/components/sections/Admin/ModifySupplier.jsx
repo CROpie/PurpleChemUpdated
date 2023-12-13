@@ -12,7 +12,7 @@ import { useDeleteSupplier } from '../../../mutations/useDeleteSupplier'
 
 // populate 'suppliers' cache with data
 function suppliersQuery() {
-  return { queryKey: ['suppliers'], queryFn: getSuppliersData }
+  return { queryKey: ['suppliers'], queryFn: getSuppliersData, staleTime: 1000 * 60 * 5 }
 }
 async function getSuppliersData() {
   const JWT = await getSessionWithRefresh()
@@ -35,8 +35,7 @@ export const adminSuppliersLoader = (queryClient) => async () => {
   const JWT = await getSessionWithRefresh()
   if (!JWT) return null
 
-  const query = suppliersQuery()
-  const data = queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query))
+  const data = await queryClient.ensureQueryData(suppliersQuery())
 
   if (!data) return 'no data'
 

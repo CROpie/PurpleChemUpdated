@@ -26,9 +26,12 @@ export default function Query() {
     queryType === 'string' ? setQueryType('structure') : setQueryType('string')
   }
 
+  // don't want staleTime because then would have to invalidate "query" every time there is a patch
+  // really not worth the effort
   const { data: orders } = useQuery({
     queryKey: ['query', queryString],
     queryFn: () => getQueryData({ queryType, queryString }),
+    // staleTime: 1000 * 60 * 5,
   })
 
   return (

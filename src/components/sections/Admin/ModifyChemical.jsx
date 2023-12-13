@@ -10,9 +10,9 @@ import { useQuery } from '@tanstack/react-query'
 import { CustomTable } from '../../minor/Table'
 import { useDeleteChemical } from '../../../mutations/useDeleteChemical'
 
-// populate 'suppliers' cache with data
+// populate 'chemicals' cache with data
 function chemicalsQuery() {
-  return { queryKey: ['chemicals'], queryFn: getChemicalsData }
+  return { queryKey: ['chemicals'], queryFn: getChemicalsData, staleTime: 1000 * 60 * 5 }
 }
 async function getChemicalsData() {
   const JWT = await getSessionWithRefresh()
@@ -35,8 +35,7 @@ export const adminChemicalsLoader = (queryClient) => async () => {
   const JWT = await getSessionWithRefresh()
   if (!JWT) return null
 
-  const query = chemicalsQuery()
-  const data = queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query))
+  const data = await queryClient.ensureQueryData(chemicalsQuery())
 
   if (!data) return 'no data'
 

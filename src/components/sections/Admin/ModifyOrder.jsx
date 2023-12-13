@@ -10,9 +10,9 @@ import { useQuery } from '@tanstack/react-query'
 import { CustomTable } from '../../minor/Table'
 import { useDeleteOrder } from '../../../mutations/useDeleteOrder'
 
-// populate 'suppliers' cache with data
+// populate 'orders' cache with data
 function ordersQuery() {
-  return { queryKey: ['orders'], queryFn: getOrdersData }
+  return { queryKey: ['orders'], queryFn: getOrdersData, staleTime: 1000 * 60 * 5 }
 }
 async function getOrdersData() {
   const JWT = await getSessionWithRefresh()
@@ -35,8 +35,7 @@ export const adminOrdersLoader = (queryClient) => async () => {
   const JWT = await getSessionWithRefresh()
   if (!JWT) return null
 
-  const query = ordersQuery()
-  const data = queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query))
+  const data = await queryClient.ensureQueryData(ordersQuery())
 
   if (!data) return 'no data'
 

@@ -18,7 +18,7 @@ import { getSessionWithRefresh } from '../../utils/SessionAPI'
 
 // populate 'suppliers' cache with data
 function suppliersQuery() {
-  return { queryKey: ['suppliers'], queryFn: getSuppliersData }
+  return { queryKey: ['suppliers'], queryFn: getSuppliersData, staleTime: 1000 * 60 * 5 }
 }
 async function getSuppliersData() {
   const JWT = await getSessionWithRefresh()
@@ -41,8 +41,10 @@ export const suppliersLoader = (queryClient) => async () => {
   const JWT = await getSessionWithRefresh()
   if (!JWT) return null
 
-  const query = suppliersQuery()
-  const data = queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query))
+  const data = await queryClient.ensureQueryData(suppliersQuery())
+  // above is the same as below, included in v4.18.0
+  // const query = suppliersQuery()
+  // const data = queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query))
 
   if (!data) return 'no data'
 

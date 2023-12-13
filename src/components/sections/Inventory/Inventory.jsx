@@ -14,7 +14,8 @@ import { getSessionWithRefresh } from '../../utils/SessionAPI'
 
 // populate 'inventory' cache with data
 function inventoryQuery() {
-  return { queryKey: ['inventory'], queryFn: getInventoryData }
+  // staleTime require to ensure fetch doesn't occur on every load
+  return { queryKey: ['inventory'], queryFn: getInventoryData, staleTime: 1000 * 60 * 5 }
 }
 
 async function getInventoryData() {
@@ -44,8 +45,10 @@ export const inventoryLoader = (queryClient) => async () => {
 
   if (!JWT) return null
 
-  const query = inventoryQuery()
-  const data = queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query))
+  const data = await queryClient.ensureQueryData(inventoryQuery())
+  // above is the same as below, included in v4.18.0
+  // const query = inventoryQuery()
+  // const data = queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query))
 
   if (!data) return 'no data'
 
