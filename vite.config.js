@@ -21,12 +21,6 @@ export default defineConfig(({ command }) => {
       plugins: [react()],
       build: {
         chunkSizeWarningLimit: 1000,
-        rollupOptions: {
-          external: [
-            // '/src/assets/jsme-editor/jsme.nocache.js',
-            // '/src/assets/@rdkit/rdkit/dist/RDKit_minimal.js',
-          ],
-        },
       },
     }
   }
