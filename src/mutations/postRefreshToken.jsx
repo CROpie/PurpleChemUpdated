@@ -1,7 +1,7 @@
 import { AuthURL } from '../constants'
 
 export async function postRefreshToken({ refresh_token }) {
-  const response = await fetch(`${AuthURL}/refreshtoken`, {
+  const response = await fetch(`${AuthURL}/refreshtoken/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({ refresh_token }),

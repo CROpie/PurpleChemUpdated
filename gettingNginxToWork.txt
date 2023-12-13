@@ -1,0 +1,62 @@
+Nginx takes 433 requests and distributes them to other ports (opened container ports)
+
+80 is not special for other ports, however 80 cannot be blocked when trying to get additional ssl certificates
+
+/etc/nginx/sites-available/default
+
+server {
+    listen 443 ssl;
+    server_name api1.cropie.store;
+
+    # generate using lets encrypt
+    ssl_cerficiate...
+    ssl_cerficiate_key...
+
+    location / {
+        # make cors work for preflight
+        if ($request_method = 'OPTIONS') {
+            add_header 'Access-Control-Allow-Origin' '*';
+                # the others are standard, but had to specifically add delete
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, DELETE'
+            ...
+        return 204;
+        }
+
+        # The open port on the container
+        proxy_pass http;//localhost:85;
+    }
+}
+
+Don't need to go 433 -> <other port> -> 433, can just to eg 433 -> 85 -> 85 as usual
+
+open port on container is established with running it, the other is set in the dockerfile (ie uvicorn etc)
+
+eg
+nginx 433 -> container port 85 -> uvicorn 85
+
+4 network responses:
+
+OPTIONS (preflight) 202
+GET (Which had Auth on the request headers)
+OPTIONS (preflight) 
+GET (403 Not Authorized)
+
+Thought the problem was something to do with Auth, but in the end it wasn't
+
+When nginx reroutes from https to http on the droplet, it adds a / to the URL
+
+api2.cropie.store/inventory
+->
+api2.cropie.store/inventory/
+
+So added a slash to the end of the api calls to be consistent with nginx, and suddenly it's working fine.
+
+Not sure why auth was working without this slash though ???
+
+A trailing slash is being added by nginx, which is caused all my problems
+
+Had to add trailing slashes before /? in query parameters too.
+
+https://api2.cropie.store/ordersquery?queryType=string&queryString=benzene
+->
+http://api2.cropie.store/ordersquery/?queryType=string&queryString=benzene
