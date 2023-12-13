@@ -9,7 +9,9 @@ import { toast } from 'react-toastify'
 import { logOut } from '../utils/SessionAPI'
 import Hamburger from '../icons/Hamburger'
 
-import LOGO from '../../assets/BearbeerCrop.png'
+// import LOGO from '../../assets/BearbeerCrop.png'
+
+import LOGO from '../../../public/BearbeerCrop.png'
 
 const pages = ['admin', 'inventory', 'order', 'query']
 
