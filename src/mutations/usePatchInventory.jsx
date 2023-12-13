@@ -8,7 +8,7 @@ async function patchInventory({ patchInventoryItem }) {
   const JWT = await getSessionWithRefresh()
   if (!JWT) throw new Error('Network response was not ok.')
 
-  const response = await fetch(`${DataURL}/inventory`, {
+  const response = await fetch(`${DataURL}/inventory/`, {
     method: 'PATCH',
     headers: { 'content-type': 'application/json', Authorization: `Bearer ${JWT}` },
     body: JSON.stringify(patchInventoryItem),

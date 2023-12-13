@@ -22,7 +22,7 @@ async function getInventoryData() {
 
   if (!JWT) return null
 
-  const response = await fetch(`${DataURL}/inventory`, {
+  const response = await fetch(`${DataURL}/inventory/`, {
     headers: {
       'content-type': 'application/json',
       Authorization: `Bearer ${JWT}`,

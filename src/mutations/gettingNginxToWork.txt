@@ -1,0 +1,37 @@
+Nginx: 433 -> 81 (auth) and 80 (data) APIs
+
+Changed exposed port (Uvicorn) on apis to 433 (not sure if this was necessary)
+
+Opened docker with 81:433 and 80:433
+
+((could have stuck with 433 -> 81 -> 81 ? ))
+
+Anyway, even with the changes, nginx was causing problems.
+The auth API was working fine, but the data one wasn't
+
+4 network responses:
+
+OPTIONS (preflight) 202
+GET (Which had Auth on the request headers)
+OPTIONS (preflight) 
+GET (403 Not Authorized)
+
+Thought the problem was something to do with Auth, but in the end it wasn't
+
+When nginx reroutes from https to http on the droplet, it adds a / to the URL
+
+api2.cropie.store/inventory
+->
+api2.cropie.store/inventory/
+
+So added a slash to the end of the api calls to be consistent with nginx, and suddenly it's working fine.
+
+Not sure why auth was working without this slash though ???
+
+A trailing slash is being added by nginx, which is caused all my problems
+
+Had to add trailing slashes before /? in query parameters too.
+
+https://api2.cropie.store/ordersquery?queryType=string&queryString=benzene
+->
+http://api2.cropie.store/ordersquery/?queryType=string&queryString=benzene

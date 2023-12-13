@@ -10,7 +10,7 @@ async function deleteOrder({ id }) {
   const JWT = await getSessionWithRefresh()
   if (!JWT) throw new Error('Network response was not ok.')
 
-  const response = await fetch(`${DataURL}/order?order_id=${id}`, {
+  const response = await fetch(`${DataURL}/order/?order_id=${id}`, {
     method: 'DELETE',
     headers: { 'content-type': 'application/json', Authorization: `Bearer ${JWT}` },
   })

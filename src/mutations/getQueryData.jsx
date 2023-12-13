@@ -10,7 +10,7 @@ export async function getQueryData({ queryType, queryString }) {
   if (!JWT) throw new Error('Network response was not ok.')
 
   const response = await fetch(
-    `${DataURL}/ordersquery?queryType=${queryType}&queryString=${queryString}`,
+    `${DataURL}/ordersquery/?queryType=${queryType}&queryString=${queryString}`,
     {
       headers: { 'content-type': 'application/json', Authorization: `Bearer ${JWT}` },
     }

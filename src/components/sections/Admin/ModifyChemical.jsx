@@ -18,7 +18,7 @@ async function getChemicalsData() {
   const JWT = await getSessionWithRefresh()
   if (!JWT) return null
 
-  const response = await fetch(`${DataURL}/chemicalslist`, {
+  const response = await fetch(`${DataURL}/chemicalslist/`, {
     headers: { 'content-type': 'application/json', Authorization: `Bearer ${JWT}` },
   })
   if (!response.ok) {

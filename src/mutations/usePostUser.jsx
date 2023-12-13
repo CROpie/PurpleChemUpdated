@@ -39,7 +39,7 @@ async function postUserAuth({ username, password, role, JWT }) {
 }
 
 async function postUserData({ id, username, full_name, JWT }) {
-  const response = await fetch(`${DataURL}/user`, {
+  const response = await fetch(`${DataURL}/user/`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', Authorization: `Bearer ${JWT}` },
     body: JSON.stringify({ id, username, full_name }),

@@ -24,7 +24,7 @@ async function getSuppliersData() {
   const JWT = await getSessionWithRefresh()
   if (!JWT) return null
 
-  const response = await fetch(`${DataURL}/supplierslist`, {
+  const response = await fetch(`${DataURL}/supplierslist/`, {
     headers: { 'content-type': 'application/json', Authorization: `Bearer ${JWT}` },
   })
   if (!response.ok) {
