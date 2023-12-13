@@ -23,8 +23,8 @@ export default defineConfig(({ command }) => {
         chunkSizeWarningLimit: 1000,
         rollupOptions: {
           external: [
-            '/src/assets/jsme-editor/jsme.nocache.js',
-            '/src/assets/@rdkit/rdkit/dist/RDKit_minimal.js',
+            // '/src/assets/jsme-editor/jsme.nocache.js',
+            // '/src/assets/@rdkit/rdkit/dist/RDKit_minimal.js',
           ],
         },
       },
