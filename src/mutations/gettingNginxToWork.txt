@@ -9,6 +9,8 @@ Opened docker with 81:433 and 80:433
 Anyway, even with the changes, nginx was causing problems.
 The auth API was working fine, but the data one wasn't
 
+(So have no idea if need to expose 433, will test it next time...)
+
 4 network responses:
 
 OPTIONS (preflight) 202
