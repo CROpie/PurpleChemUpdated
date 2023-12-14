@@ -4,8 +4,6 @@ import { MOBILEBREAKPOINT } from '../../constants'
 
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-import { toast } from 'react-toastify'
-
 import { logOut } from '../utils/SessionAPI'
 import Hamburger from '../icons/Hamburger'
 
@@ -18,16 +16,18 @@ function Menu({ JWT }) {
   let { pathname } = useLocation()
   pathname = pathname.slice(1)
 
-  const [selectedPage, setSelectedPage] = React.useState(pathname)
+  const [selectedPage, setSelectedPage] = React.useState('')
+
+  // ensure that the correct menu is highlighted on login as well as refresh
+  React.useEffect(() => {
+    setSelectedPage(pathname)
+  }, [pathname])
 
   function handleLogOut() {
+    setSelectedPage('')
     logOut()
-    toast.success('Logged out.')
-    // there is a bug where if (for some reason) navigated to "/", then log out will not go to public root after logout
-    // (need to manually refresh the page to see the login screen again)
+    // toast.success('Logged out.')
     navigate('/', { replace: true })
-    // this command fixes it, but it looks ugly. Will keep it hidden for now, since the bug is hard to access
-    // window.location.reload()
   }
 
   /* responsive stuff */
@@ -85,6 +85,7 @@ const Wrapper = styled.nav`
   padding: 0.5rem 1rem;
   background: var(--backgroundWhite);
   color: var(--text-color);
+  margin-bottom: 2rem;
 
   @media (${MOBILEBREAKPOINT}) {
     display: block;
@@ -124,6 +125,7 @@ const LinkList = styled(Link)`
 `
 
 const LogoutBtn = styled.button`
+  font-family: var(--font);
   border: none;
   font-size: 1.25rem;
   background: transparent;

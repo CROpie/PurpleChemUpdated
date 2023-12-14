@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { formLabel, formInput } from '../../styles/mixins'
+import { formLabel, formInput, inputBtn } from '../../styles/mixins'
 
 export default function QueryString({ setQueryString }) {
   const formRef = React.useRef()
@@ -18,6 +18,7 @@ export default function QueryString({ setQueryString }) {
     <Wrapper ref={formRef} onSubmit={handleSubmit}>
       <Label htmlFor="querystring">Chemical name, CAS or user </Label>
       <Input id="querystring" name="querystring" />
+      <Button>Search</Button>
     </Wrapper>
   )
 }
@@ -30,4 +31,7 @@ const Label = styled.label`
 
 const Input = styled.input`
   ${formInput}
+`
+const Button = styled.button`
+  ${inputBtn}
 `

@@ -7,6 +7,7 @@ import { formInput, formLabel, inputBtn } from '../../styles/mixins'
 import { useNavigate } from 'react-router-dom'
 
 import { MOBILEBREAKPOINT } from '../../../constants.js'
+import Heading from '../../minor/Heading.jsx'
 
 export default function Login() {
   const [email, setEmail] = React.useState('admin@purplechem.com')
@@ -31,6 +32,8 @@ export default function Login() {
 
   return (
     <Wrapper>
+      <Heading level={1}>Welcome To PurpleChem!</Heading>
+      <Heading level={3}>Please log in to continue.</Heading>
       <form onSubmit={handleSubmit}>
         <Entry>
           <Label htmlFor="email">Email: </Label>

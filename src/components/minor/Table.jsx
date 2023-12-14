@@ -42,7 +42,7 @@ const Table = styled.table`
   border-collapse: collapse;
   border-radius: var(--borderRadius);
   width: 100%;
-  margin-top: 2rem;
+
   table-layout: fixed;
   word-break: break-all;
   font-size: 1rem;

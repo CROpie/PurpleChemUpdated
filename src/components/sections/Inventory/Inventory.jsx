@@ -81,9 +81,7 @@ export default function Inventory() {
   )
 }
 
-const Wrapper = styled.main`
-  margin-top: 2rem;
-`
+const Wrapper = styled.main``
 
 const Layout = styled.section`
   display: grid;

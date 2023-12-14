@@ -32,9 +32,7 @@ export default function AddSupplier() {
   )
 }
 
-const Wrapper = styled.main`
-  margin-top: 2rem;
-`
+const Wrapper = styled.main``
 
 const Label = styled.label`
   ${formLabel}

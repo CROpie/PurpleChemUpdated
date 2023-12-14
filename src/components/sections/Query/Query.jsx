@@ -47,10 +47,9 @@ export default function Query() {
   )
 }
 
-const Wrapper = styled.main`
-  margin-top: 2rem;
-`
+const Wrapper = styled.main``
 
 const Button = styled.button`
   ${inputBtn}
+  margin-bottom: 2rem;
 `

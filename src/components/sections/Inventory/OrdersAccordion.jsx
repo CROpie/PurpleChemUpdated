@@ -41,7 +41,11 @@ export default function OrdersAccordion({ orders, selectedLocation, locations })
             <AcTrigger
               $isSelected={selectedItem === order.id}
               onClick={() => handleClick(order)}
-              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(order.chemical.chemicalName) }}
+              dangerouslySetInnerHTML={{
+                __html:
+                  (order.location_id === null ? '*' : '') +
+                  DOMPurify.sanitize(order.chemical.chemicalName),
+              }}
             />
           </AcHeader>
           <AcContentWrapper>
