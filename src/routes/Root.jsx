@@ -10,6 +10,8 @@ import Login from '../components/sections/Login/Login'
 
 import { getSessionWithRefresh } from '../components/utils/SessionAPI'
 
+import IntroModal from '../components/utils/IntroModal'
+
 export default function Root() {
   // token auth logic for navigation is contained in this component
 
@@ -34,8 +36,11 @@ export default function Root() {
     testSession()
   }, [location])
 
+  const [showModal, setShowModal] = React.useState(true)
+
   return (
     <Wrapper>
+      {showModal && <IntroModal handleCloseModal={() => setShowModal(false)} />}
       <Menu JWT={JWT} />
       {JWT ? <Outlet /> : <Login />}
     </Wrapper>
