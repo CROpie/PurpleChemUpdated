@@ -2,24 +2,32 @@ import { postRefreshToken } from '../../mutations/postRefreshToken'
 import { toast } from 'react-toastify'
 
 export function logIn({ data }) {
-  setCookie({ name: 'session', value: data.access_token, time: 1000 * 60 * 60 * 30 })
+  setCookie({ name: 'session', value: data.access_token, time: 1000 * 60 * 30 })
   setCookie({ name: 'refresh', value: data.refresh_token, time: 1000 * 60 * 60 * 12 })
 }
 
 export function logOut() {
+  toast.success('Logged out.')
   deleteCookie({ name: 'session' })
   deleteCookie({ name: 'refresh' })
 }
 
 export async function exchangeRefresh() {
-  const refresh_token = document.cookie
+  const refreshTokenPlusExpiry = document.cookie
     .split('; ')
     .find((row) => row.startsWith('refresh='))
     ?.split('=')[1]
 
-  if (!refresh_token) return null
+  if (!refreshTokenPlusExpiry) return null
 
-  console.log('attempting to exchange refresh token')
+  const refresh_token = refreshTokenPlusExpiry.split('@@@')[0]
+
+  // check for expiry
+  const expiry = new Date(refreshTokenPlusExpiry.split('@@@')[1])
+  const currentTime = new Date()
+
+  if (expiry < currentTime) return
+
   const refreshData = await postRefreshToken({ refresh_token })
 
   if (!refreshData) return null
@@ -27,6 +35,7 @@ export async function exchangeRefresh() {
   setCookie({ name: 'session', value: refreshData.access_token, time: 1000 * 60 * 30 })
 
   const token = getSession()
+
   return token
 }
 
@@ -36,13 +45,28 @@ export function getSession() {
     .find((row) => row.startsWith('session='))
     ?.split('=')[1]
 
-  return session
+  if (!session) return
+
+  const token = session.split('@@@')[0]
+
+  // check for expiry
+  const expiry = new Date(session.split('@@@')[1])
+  const currentTime = new Date()
+
+  if (expiry < currentTime) return
+
+  return token
 }
 
 function setCookie({ name, value, time }) {
+  // cookies are not automatically deleted when they expire
+  // so will save the time as part of the string, then check it on retrieval
+
   const expires = new Date()
   expires.setTime(expires.getTime() + time)
-  document.cookie = `${name}=${value}; expires=${expires.toUTCString()}`
+  const valueExpiry = `${value}@@@${expires}`
+  // document.cookie = `${name}=${value}; expires=${expires.toUTCString()}`
+  document.cookie = `${name}=${valueExpiry}; expires=${expires.toUTCString()}`
 }
 
 function deleteCookie({ name }) {
@@ -59,8 +83,6 @@ export async function getSessionWithRefresh() {
     const refreshedToken = await exchangeRefresh()
 
     if (!refreshedToken) {
-      toast.error('Session has expired.')
-      // throw new Error('Network response was not ok.')
       return null
     } else {
       JWT = refreshedToken

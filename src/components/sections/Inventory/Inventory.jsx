@@ -43,10 +43,13 @@ export const inventoryLoader = (queryClient) => async () => {
   // (separate from preventing routing)
   const JWT = await getSessionWithRefresh()
 
+  // this seems to prevent Inventory from being rendered at all (?)
+  // if both token and refresh_token have expired, then JWT is undefined
+  // null is returned, and the user automatically gets send back to root somehow ...
   if (!JWT) return null
 
+  // included in v4.18.0 is a cleaner way to right the commented out code below
   const data = await queryClient.ensureQueryData(inventoryQuery())
-  // above is the same as below, included in v4.18.0
   // const query = inventoryQuery()
   // const data = queryClient.getQueryData(query.queryKey) ?? (await queryClient.fetchQuery(query))
 
@@ -59,6 +62,7 @@ export default function Inventory() {
   // retrieve data from cache
   const query = inventoryQuery()
   const { data } = useQuery(query)
+
   const { locationsList: locations, ordersList: orders } = data
 
   const [selectedLocation, setSelectedLocation] = React.useState({ id: 'all', locationName: 'all' })
