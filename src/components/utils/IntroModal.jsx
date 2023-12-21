@@ -48,6 +48,26 @@ export default function IntroModal({ handleCloseModal }) {
     setModalIndex(tempIndex)
   }
 
+  function handleKeyDown(event) {
+    if (event.key === 'ArrowRight') {
+      handleClickArrow('next')
+    }
+    if (event.key === 'ArrowLeft') {
+      handleClickArrow('prev')
+    }
+    if (event.key === 'Escape') {
+      handleCloseModal()
+    }
+  }
+
+  React.useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [modalIndex])
+
   return (
     <ModalBackground>
       <Modal>
