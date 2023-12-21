@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import Icon from '../icons/Icon'
 import DOMPurify from 'dompurify'
 
+import { MOBILEBREAKPOINT } from '../../constants'
+
 import { modalSVGs } from '../modalSVGs/modalSVGs'
 import { ModalCtx } from '../../contexts/ModalCtx'
 
@@ -104,6 +106,9 @@ const ModalBackground = styled.div`
   z-index: 3;
   background-color: rgba(0, 0, 0, 0.6);
   /* display: none; */
+
+  @media (${MOBILEBREAKPOINT}) {
+  }
 `
 
 const Modal = styled.div`
@@ -133,6 +138,18 @@ const Modal = styled.div`
 
   border-radius: 16px;
   box-shadow: -2px 5px 5px #a507c5;
+
+  @media (${MOBILEBREAKPOINT}) {
+    width: 100%;
+    height: auto;
+    position: static;
+    transform: revert;
+    border-radius: revert;
+    margin: none;
+    padding: none;
+    /* display: block; */
+    grid-template-rows: auto auto auto auto;
+  }
 `
 
 const ModalHeadingH1 = styled.h1`
@@ -153,6 +170,12 @@ const ModalText = styled.p`
 const ModalImageContainer = styled.div`
   display: grid;
   place-items: center;
+
+  & > div > svg {
+    @media (${MOBILEBREAKPOINT}) {
+      width: 300px;
+    }
+  }
 `
 
 const Image = styled.img``
