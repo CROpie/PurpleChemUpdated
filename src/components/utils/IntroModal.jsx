@@ -4,8 +4,10 @@ import Icon from '../icons/Icon'
 import DOMPurify from 'dompurify'
 
 import { modalSVGs } from '../modalSVGs/modalSVGs'
+import { ModalCtx } from '../../contexts/ModalCtx'
 
 const headings = [
+  'Welcome to PurpleChem!',
   'Order Chemical',
   'Order Chemical',
   'Order Chemical',
@@ -18,9 +20,10 @@ const headings = [
   'Admin',
 ]
 const texts = [
+  "This app is designed for research institutes and researchers to help organize their chemical inventories. Chemicals are ordered in the 'Order' tab, then tracked in the current user's 'Inventory' tab. The 'Query' tab allows users to search the entire company / institute's chemical database. For more detailed information about the functions of the app, please click the arrows below.",
   'To "order" a chemical, start by entering the chemical name or its unique CAS reference number. (CAS numbers are used by chemists as a convenient way to refer to chemicals, as chemical names can become quite long and complicated!)',
   'If found, the chemical properties will be extracted from either an online database or the PurpleChem database. Failing that, the structure and other properties may be inputted manually.',
-  'Other essential details are inputted, then the order is placed (put into the database) with the status "submitted". Administrators (lab supervisors, suppliers etc) would change this status to "ordered" then "received".',
+  'Other essential details need to be inputted, then the order can be placed (put into the database) with the status "submitted". Administrators (lab supervisors, suppliers etc) would change this status to "ordered" then "received".',
   'Orders that you have placed can be accessed in your own personal Inventory page.',
   'Clicking on an order displays their properties for easy reference, and allows updating of the amount remaining after use and current location. Setting the amount remaining to 0 will flag the chemical as "consumed", and it will be removed from the inventory. Orders with an asterisk next to their name have not been placed in a location.',
   'Organise your chemicals to match where they are stored in the lab by adding Locations to the location sidebar. Clicking on a location will filter the inventory to that location. ',
@@ -31,7 +34,7 @@ const texts = [
 ]
 
 export default function IntroModal({ handleCloseModal }) {
-  const [modalIndex, setModalIndex] = React.useState(0)
+  const { modalIndex, setModalIndex } = React.useContext(ModalCtx)
 
   function handleClickArrow(direction) {
     let tempIndex = modalIndex
@@ -48,7 +51,8 @@ export default function IntroModal({ handleCloseModal }) {
   return (
     <ModalBackground>
       <Modal>
-        <ModalHeadingH2>{`${modalIndex + 1}: ${headings[modalIndex]}`}</ModalHeadingH2>
+        {/* <ModalHeadingH2>{`${modalIndex + 1}: ${headings[modalIndex]}`}</ModalHeadingH2> */}
+        <ModalHeadingH2>{`${headings[modalIndex]}`}</ModalHeadingH2>
         <ModalText>{texts[modalIndex]}</ModalText>
         <ModalImageContainer>
           <div dangerouslySetInnerHTML={{ __html: modalSVGs[modalIndex] }} />
@@ -117,6 +121,7 @@ const ModalHeadingH1 = styled.h1`
 `
 
 const ModalHeadingH2 = styled.h2`
+  text-align: center;
   font-size: 1.5rem;
 `
 
@@ -152,6 +157,10 @@ const Button = styled.button`
   background: transparent;
   border: none;
 
+  & > div > svg {
+    transition: color 0.25s ease-in;
+  }
+
   & > div > svg:hover {
     color: green;
   }
@@ -164,13 +173,14 @@ const ImageNextButton = styled.img``
 const ModalCloseButton = styled.button`
   font-size: 1.5rem;
   width: auto;
-  background: lightgrey;
+
   border: 3px solid black;
-  border-radius: 4px;
+  border-radius: 8px;
 
   padding-inline: 16px;
+  transition: background-color 0.25s ease-in, color 0.25s ease-in;
   &:hover {
-    background: black;
+    background: #a507c5;
     color: white;
   }
 `

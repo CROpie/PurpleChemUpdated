@@ -41,7 +41,7 @@ export default function Root() {
   return (
     <Wrapper>
       {showModal && <IntroModal handleCloseModal={() => setShowModal(false)} />}
-      <Menu JWT={JWT} />
+      <Menu JWT={JWT} setShowModal={setShowModal} />
       {JWT ? <Outlet /> : <Login />}
     </Wrapper>
   )

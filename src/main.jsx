@@ -11,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import './index.css'
 
 import { RDKitCtxProvider } from './contexts/RDKitCtx'
+import { ModalCtxProvider } from './contexts/ModalCtx'
 
 import Root from './routes/Root'
 import Inventory from './components/sections/Inventory/Inventory'
@@ -92,7 +93,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       transition={Flip}
     />
     <RDKitCtxProvider>
-      <RouterProvider router={router} />
+      <ModalCtxProvider>
+        <RouterProvider router={router} />
+      </ModalCtxProvider>
     </RDKitCtxProvider>
   </QueryClientProvider>
 )

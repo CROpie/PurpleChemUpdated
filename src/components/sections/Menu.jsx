@@ -8,10 +8,11 @@ import { logOut } from '../utils/SessionAPI'
 import Hamburger from '../icons/Hamburger'
 
 import LOGO from '../../assets/BearbeerCrop.png'
+import Icon from '../icons/Icon'
 
 const pages = ['admin', 'inventory', 'order', 'query']
 
-function Menu({ JWT }) {
+function Menu({ JWT, setShowModal }) {
   const navigate = useNavigate()
   let { pathname } = useLocation()
   pathname = pathname.slice(1)
@@ -28,6 +29,10 @@ function Menu({ JWT }) {
     logOut()
     // toast.success('Logged out.')
     navigate('/', { replace: true })
+  }
+
+  function handleHelp() {
+    setShowModal(true)
   }
 
   /* responsive stuff */
@@ -63,8 +68,15 @@ function Menu({ JWT }) {
           ))}
 
           <Hider>
+            <HelpBtn onClick={handleHelp}>HELP</HelpBtn>
+          </Hider>
+
+          <Hider>
             <LogoutBtn onClick={handleLogOut}>LOG OUT</LogoutBtn>
           </Hider>
+          <ReverseHider>
+            <HelpBtn onClick={handleHelp}>HELP</HelpBtn>
+          </ReverseHider>
         </Links>
       </LinksContainer>
       <Spacer>
@@ -137,6 +149,19 @@ const LogoutBtn = styled.button`
   }
 `
 
+const HelpBtn = styled.button`
+  font-family: var(--font);
+  border: none;
+  font-size: 1.25rem;
+  background: transparent;
+  color: orange;
+  text-transform: capitalize;
+  cursor: pointer;
+  &:hover {
+    color: lime;
+  }
+`
+
 const ImgContainer = styled.div`
   height: 48px;
 
@@ -192,5 +217,12 @@ const Hider = styled.div`
   display: none;
   @media (${MOBILEBREAKPOINT}) {
     display: block;
+  }
+`
+
+const ReverseHider = styled.div`
+  display: block;
+  @media (${MOBILEBREAKPOINT}) {
+    display: none;
   }
 `
