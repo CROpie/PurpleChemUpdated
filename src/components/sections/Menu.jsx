@@ -164,6 +164,7 @@ const HelpBtn = styled.button`
 
 const ImgContainer = styled.div`
   height: 48px;
+  width: 48px;
 
   & > img {
     height: 100%;

@@ -108,6 +108,7 @@ const ModalBackground = styled.div`
   /* display: none; */
 
   @media (${MOBILEBREAKPOINT}) {
+    position: static;
   }
 `
 
@@ -149,6 +150,7 @@ const Modal = styled.div`
     padding: none;
     /* display: block; */
     grid-template-rows: auto auto auto auto;
+    overflow-y: auto;
   }
 `
 
