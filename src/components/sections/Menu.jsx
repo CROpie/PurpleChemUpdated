@@ -50,7 +50,7 @@ function Menu({ JWT, setShowModal }) {
           <img src={LOGO} alt="beerbear" />
         </ImgContainer>
         <HamburgerContainer onClick={toggleLinks}>
-          <Hamburger />
+          <Icon id="Hamburger" />
         </HamburgerContainer>
       </LogoBurger>
       <LinksContainer $showLinks={showLinks} $linksRef={linksRef}>
@@ -178,8 +178,11 @@ const HamburgerContainer = styled.button`
 
   @media (${MOBILEBREAKPOINT}) {
     display: block;
-    height: 32px;
-    width: 32px;
+    height: 48px;
+    width: 48px;
+    border: none;
+    background: transparent;
+    color: lightgrey;
     cursor: pointer;
 
     & > svg {

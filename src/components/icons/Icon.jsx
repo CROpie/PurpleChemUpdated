@@ -3,11 +3,13 @@ import styled from 'styled-components'
 import ArrowLeft from './ArrowLeft'
 import ArrowRight from './ArrowRight'
 import { Help } from './Help'
+import Hamburger from './Hamburger'
 
 const icons = {
   ArrowLeft,
   ArrowRight,
   Help,
+  Hamburger,
 }
 
 const Icon = ({ id, height, color, size, strokeWidth, ...delegated }) => {
